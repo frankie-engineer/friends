@@ -2,7 +2,7 @@ const { expect } = require('chai');
 
 const SocialNetwork = require("../social.js");
 
-describe ('Tree practice', function () {
+describe('Tree practice', function () {
 
   let socialNetwork;
 
@@ -38,13 +38,13 @@ describe ('Tree practice', function () {
 
     it("initializes an empty set for the user's followers", function () {
 
-        expect(Object.keys(socialNetwork.follows).length).to.equal(0);
+      expect(Object.keys(socialNetwork.follows).length).to.equal(0);
 
-        expect(socialNetwork.addUser('User 1')).to.equal(1);
+      expect(socialNetwork.addUser('User 1')).to.equal(1);
 
-        expect(Object.keys(socialNetwork.follows).length).to.equal(1);
+      expect(Object.keys(socialNetwork.follows).length).to.equal(1);
 
-        expect(socialNetwork.follows['1']).to.be.an.instanceof(Set)
+      expect(socialNetwork.follows['1']).to.be.an.instanceof(Set)
 
     })
   });
