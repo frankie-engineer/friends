@@ -60,32 +60,29 @@ class SocialNetwork {
    * Recommends follows based on follows of specified user's follows
    * @param {*} degrees - distance algorithm will search for recommended follows
    * @returns array of recommended follows
+   *
    */
   getRecommendedFollows(userID, degrees) {
-    let recommendedFollows = new Set();
-    let prevDegFollows = this.getFollows(userID); // Set
-    let currDegFollows = new Set();
-    console.log(prevDegFollows);
+    const queue = [[userID]];
+    const visited = new Set();
+    const friends = [];
 
-    let degree = 1;
-    while (degree <= degrees) {
-      for (const el in prevDegFollows) {
-        let followOfFollows = this.getFollows(prevDegFollows[el]);
+    while (queue.length > 0) {
+      let path = queue.shift();
+      let currentNode = path[path.length - 1];
 
-        for (const el2 in followsOfFollows) {
-          let follow = followsOfFollows[el2];
-          recommendedFollows.add(follow);
-          currDegFollows.add(follow);
-        }
+      if (!visited.has(currentNode)) {
+        visited.add(currentNode);
+
+        // add all paths to except to: itself, existing follows, & follows > 'degrees' away
+        if (path.length > 2 && path.length <= degrees + 2) friends.push(currentNode);
+
+        // add paths to all follows of follows to queue
+        let follows = this.getFollows(currentNode);
+        follows.forEach(follow => queue.push([...path, follow]));
       }
-
-      prevDegFollows = currDegFollows;
-      console.log('PREV DEG FOLLOWS', prevDegFollows);
-      degree++;
     }
-
-
-    return Array.from(recommendedFollows);
+    return friends;
   }
 }
 
