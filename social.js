@@ -1,4 +1,3 @@
-// Implement the SocialNetwork class here
 class SocialNetwork {
   constructor() {
     this.users = {};
@@ -23,8 +22,6 @@ class SocialNetwork {
   }
 
   /**
-   * follow()
-   *
    * sets user1 to follow user2 (& does NOT set user2 to follow user1)
    * @returns true if follow was successful, false otherwise
    */
@@ -38,10 +35,6 @@ class SocialNetwork {
     return true;
   }
 
-  /**
-   *
-   * @returns Set of follows
-   */
   getFollows(userID) {
     return this.follows[userID];
   }
@@ -57,8 +50,8 @@ class SocialNetwork {
   }
 
   /**
-   * Recommends follows based on follows of specified user's follows
-   * @param {*} degrees - distance algorithm will search for recommended follows
+   * Recommends follows by doing a Breadth-First Search algorithm that has a depth of 'degrees'
+   * @param {*} degrees - max number of degrees between user & the recommended follow
    * @returns array of recommended follows
    *
    */
@@ -68,16 +61,25 @@ class SocialNetwork {
     const friends = [];
 
     while (queue.length > 0) {
+      // remove first element from queue & set it equal to path
       let path = queue.shift();
+
+      // let the current note be the last element in path 
       let currentNode = path[path.length - 1];
+
 
       if (!visited.has(currentNode)) {
         visited.add(currentNode);
 
-        // add all paths to except to: itself, existing follows, & follows > 'degrees' away
+        /* add all paths except paths to:
+         - itself
+         - existing follows
+         - follows > 'degrees' away
+         */
         if (path.length > 2 && path.length <= degrees + 2) friends.push(currentNode);
 
-        // add paths to all follows of follows to queue
+        // get the followers of all of the current node 
+        // add these followers to the queue 
         let follows = this.getFollows(currentNode);
         follows.forEach(follow => queue.push([...path, follow]));
       }
